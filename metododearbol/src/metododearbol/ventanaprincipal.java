@@ -1,5 +1,7 @@
 package metododearbol;
 
+import javax.swing.JOptionPane;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -15,6 +17,7 @@ public class ventanaprincipal extends javax.swing.JFrame {
     /**
      * Creates new form ventanaprincipal
      */
+    analizadorlexico nuevoanalisislexico=new analizadorlexico();
     public ventanaprincipal() {
         initComponents();
     }
@@ -31,7 +34,7 @@ public class ventanaprincipal extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTree1 = new javax.swing.JTree();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        entrada = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -46,9 +49,9 @@ public class ventanaprincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        entrada.setColumns(20);
+        entrada.setRows(5);
+        jScrollPane1.setViewportView(entrada);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("TEXTO A ANALIZAR");
@@ -56,6 +59,11 @@ public class ventanaprincipal extends javax.swing.JFrame {
         jButton1.setText("GENERAR AUTOMATAS");
 
         jButton2.setText("ANALIZAR TEXTO");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("ARCHVO");
 
@@ -120,6 +128,27 @@ public class ventanaprincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+       if(entrada.getText().equalsIgnoreCase(""))
+       {
+           JOptionPane.showMessageDialog(null, "ingrese texto al cuado de texto");
+       }
+       else
+       {
+           boolean sinerrores=nuevoanalisislexico.analisislexico(entrada.getText());
+       if(sinerrores)
+       {
+          JOptionPane.showMessageDialog(null, "entrada sin errores");
+          nuevoanalisislexico.imprimir();
+       }
+       else
+       {
+           JOptionPane.showMessageDialog(null, "se encontraron errores");
+       }
+       }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -156,6 +185,7 @@ public class ventanaprincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea entrada;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -167,7 +197,6 @@ public class ventanaprincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTree jTree1;
     // End of variables declaration//GEN-END:variables
 }
