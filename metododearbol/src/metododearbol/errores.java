@@ -16,6 +16,7 @@ public class errores {
     String tipoerror;
     
     
+    
     errores(int posix,int posiy,String erro,String tiperror)
     {
     posx=posix;
