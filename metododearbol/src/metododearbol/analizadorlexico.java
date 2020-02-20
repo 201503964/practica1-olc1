@@ -90,7 +90,7 @@ public class analizadorlexico {
                 indice++;
                 estado=2;
             } 
-           else  if(ascii==58)
+           else  if(ascii==58) //////////dos puntos
             {  
                token=String.valueOf(caracteres[indice]);
                lexemas nuevo1=new lexemas(x,y,token,"dos puntos");
@@ -99,25 +99,63 @@ public class analizadorlexico {
                indice++;
                estado=0;
             }
-           else if(ascii==45)
+             else  if(ascii==59)/////////////////punto y coma
+            {  
+               token=String.valueOf(caracteres[indice]);
+               lexemas nuevo1=new lexemas(x,y,token,"punto y coma");
+               listadetokens.add(nuevo1);
+               x++;
+               indice++;
+               estado=0;
+            }
+           
+           else if(ascii==45)///////////////flecha
            {
                token=token+String.valueOf(caracteres[indice]);
                 x++;
                 indice++;
                 estado=7;
            }
-           else if(ascii==34)
+           else if(ascii==34)/////////////////////cadena
            {               
                 x++;
                 indice++;
                 estado=9;
            }
-            else if((ascii>=65&& ascii<=90)||(ascii>=97 && ascii<=122))
+            else if((ascii>=65&& ascii<=90)||(ascii>=97 && ascii<=122))///////////////identificador y rango
             {
                token=token+String.valueOf(caracteres[indice]);
                x++;
                indice++;
                estado=8;
+            }
+            else if((ascii>=48&& ascii<=57))///////////////identificador y rango
+            {
+               token=token+String.valueOf(caracteres[indice]);
+               x++;
+               indice++;
+               estado=12;
+            }
+            else if(ascii==47)///////////////comentario de una linea
+            {
+               token=token+String.valueOf(caracteres[indice]);
+               x++;
+               indice++;
+               estado=13;
+            }
+             else if(ascii==60)///////////////comentario multilinea
+            {
+               token=token+String.valueOf(caracteres[indice]);
+               x++;
+               indice++;
+               estado=15;
+            }
+             else if(ascii==37)///////////////porcentajes
+            {
+               token=token+String.valueOf(caracteres[indice]);
+               x++;
+               indice++;
+               estado=18;
             }
             else /// si no viene ninguno de los anteriores es un error
             {
@@ -314,6 +352,21 @@ public class analizadorlexico {
                indice++;
                estado=6;
             }
+            else if(ascii==126)
+            {
+            token=token+String.valueOf(caracteres[indice]);
+            x++;
+            indice++;
+            estado=11;
+            }
+            else if(ascii==44)
+            {
+            token=token+String.valueOf(caracteres[indice]);
+            x++;
+            indice++;
+            estado=19;
+            }
+
              else
              {
              errores nuevo=new errores(x,y,token,"error lexico");
@@ -410,6 +463,279 @@ public class analizadorlexico {
              indice++;
              }
         break;
+        
+        case 11:
+            if(indice<=caracteres.length-1)
+            {
+            ascii=caracteres[indice];
+            }
+            else 
+            {
+                errores nuevo=new errores(x,y,token,"error lexico");
+                listaerrores.add(nuevo);
+            return true;
+            }
+            if((ascii>=65&& ascii<=90)||(ascii>=97 && ascii<=122)||(ascii>=48 && ascii<=57))
+            {
+               token=token+String.valueOf(caracteres[indice]);
+               lexemas nuevo=new lexemas(x,y,token,"rango");
+                listadetokens.add(nuevo);
+               x++;
+               indice++;
+               estado=0;
+            }
+             else
+             {
+             errores nuevo=new errores(x,y,token,"error lexico");
+             listaerrores.add(nuevo);
+             estado=0;
+             x++;
+             }
+        break;
+        
+         case 12:
+            if(indice<=caracteres.length-1)
+            {
+            ascii=caracteres[indice];
+            }
+            else 
+            {
+                errores nuevo=new errores(x,y,token,"error lexico");
+                listaerrores.add(nuevo);
+            return true;
+            }
+            if(ascii==126)
+            {
+               token=token+String.valueOf(caracteres[indice]);
+               x++;
+               indice++;
+               estado=11;
+            }
+            else if(ascii==44)
+            {
+            token=token+String.valueOf(caracteres[indice]);
+            x++;
+            indice++;
+            estado=19;
+            }
+             else
+             {
+             errores nuevo=new errores(x,y,token,"error lexico");
+             listaerrores.add(nuevo);
+             estado=0;
+             }
+        break;
+        case 13:
+            if(indice<=caracteres.length-1)
+            {
+            ascii=caracteres[indice];
+            }
+            else 
+            {
+                errores nuevo=new errores(x,y,token,"error lexico");
+                listaerrores.add(nuevo);
+            return true;
+            }
+            if(ascii==47)
+            {
+               token=token+String.valueOf(caracteres[indice]);
+               x++;
+               indice++;
+               estado=14;
+            }
+             else
+             {
+             errores nuevo=new errores(x,y,token,"error lexico");
+             listaerrores.add(nuevo);
+             estado=0;
+             }
+        break;
+        case 14:
+            if(indice<=caracteres.length-1)
+            {
+            ascii=caracteres[indice];
+            }
+            else 
+            {
+                lexemas nuevo=new lexemas(x,y,token,"comentario de una linea");
+                listadetokens.add(nuevo);
+            return true;
+            }
+            if(ascii==10)
+            {
+                 lexemas nuevo=new lexemas(x,y,token,"comentario de una linea");
+                listadetokens.add(nuevo);
+                x=0;
+                y++;
+                indice++;
+                estado=0;
+            }
+             else
+             {
+             token=token+String.valueOf(caracteres[indice]);
+               x++;
+               indice++;
+               estado=14;
+             }
+        break;
+        
+         case 15:
+            if(indice<=caracteres.length-1)
+            {
+            ascii=caracteres[indice];
+            }
+            else 
+            {
+                errores nuevo=new errores(x,y,token,"error lexico");
+                listaerrores.add(nuevo);
+            return true;
+            }
+            if(ascii==33)
+            {
+               token=token+String.valueOf(caracteres[indice]);
+               x++;
+               indice++;
+               estado=16;
+            }
+             else
+             {
+             errores nuevo=new errores(x,y,token,"error lexico");
+             listaerrores.add(nuevo);
+             estado=0;
+             }
+        break;
+        case 16:
+            if(indice<=caracteres.length-1)
+            {
+            ascii=caracteres[indice];
+            }
+            else 
+            {
+                errores nuevo=new errores(x,y,token,"error lexico");
+                listaerrores.add(nuevo);
+            return true;
+            }
+            if(ascii==33)
+            {
+               token=token+String.valueOf(caracteres[indice]);
+               x++;
+               indice++;
+               estado=17;
+            }
+             else
+             {
+             token=token+String.valueOf(caracteres[indice]);
+               x++;
+               indice++;
+               estado=16;
+             }
+        break;
+        case 17:
+            if(indice<=caracteres.length-1)
+            {
+            ascii=caracteres[indice];
+            }
+            else 
+            {
+                errores nuevo=new errores(x,y,token,"error lexico");
+                listaerrores.add(nuevo);
+            return true;
+            }
+            if(ascii==62)
+            {
+               token=token+String.valueOf(caracteres[indice]);
+               x++;
+               indice++;
+               estado=0;
+               lexemas nuevo=new lexemas(x,y,token,"comentario multi linea");
+                listadetokens.add(nuevo);
+            }
+             else
+             {
+             token=token+String.valueOf(caracteres[indice]);
+               x++;
+               indice++;
+               estado=16;
+             }
+        break;
+          case 18:
+            if(indice<=caracteres.length-1)
+            {
+            ascii=caracteres[indice];
+            }
+            else 
+            {
+                errores nuevo=new errores(x,y,token,"error lexico");
+                listaerrores.add(nuevo);
+            return true;
+            }
+            if(ascii==37)
+            {
+               token=token+String.valueOf(caracteres[indice]);
+               x++;
+               indice++;
+               estado=0;
+               lexemas nuevo=new lexemas(x,y,token,"doble porcentaje");
+                listadetokens.add(nuevo);
+            }
+             else
+             {
+             errores nuevo=new errores(x,y,token,"error lexico");
+                listaerrores.add(nuevo);
+               estado=0;
+             }
+        break;
+        case 19:
+            if(indice<=caracteres.length-1)
+            {
+            ascii=caracteres[indice];
+            }
+            else 
+            {
+                errores nuevo=new errores(x,y,token,"error lexico");
+                listaerrores.add(nuevo);
+            return true;
+            }
+            if((ascii>=65&& ascii<=90)||(ascii>=97 && ascii<=122)||(ascii>=48 && ascii<=57))
+            {
+               token=token+String.valueOf(caracteres[indice]);
+               x++;
+               indice++;
+               estado=20;
+            }
+             else
+             {
+             errores nuevo=new errores(x,y,token,"error lexico");
+             listaerrores.add(nuevo);
+             estado=0;
+             }
+        break;
+        case 20:
+            if(indice<=caracteres.length-1)
+            {
+            ascii=caracteres[indice];
+            }
+            else 
+            {
+                lexemas nuevo=new lexemas(x,y,token,"lista caracteres");
+                listadetokens.add(nuevo);
+            return true;
+            }
+            if(ascii==44)
+            {
+               token=token+String.valueOf(caracteres[indice]);
+               x++;
+               indice++;
+               estado=19;
+            }
+             else
+             {
+             lexemas nuevo=new lexemas(x,y,token,"lista caracteres");
+             listadetokens.add(nuevo);
+             estado=0;
+             }
+        break;
+        
     }
     }
     
