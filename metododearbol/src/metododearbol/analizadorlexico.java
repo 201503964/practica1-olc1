@@ -16,10 +16,12 @@ public class analizadorlexico {
     ArrayList<lexemas> listadetokens=new ArrayList<lexemas>();
     ArrayList<errores> listaerrores=new ArrayList<errores>();
      
-
+    ArrayList<nodolistaexpresiones> listaexpre=new ArrayList<nodolistaexpresiones>(); 
         
     boolean analisislexico(String entrada)
     {
+        listadetokens.clear();
+        listaerrores.clear();
     char caracteres[]=entrada.toCharArray();
     int ascii=0;
     int estado=0;
@@ -156,6 +158,13 @@ public class analizadorlexico {
                x++;
                indice++;
                estado=18;
+            }
+             else if(ascii==46||ascii==42||ascii==43||ascii==124||ascii==63)///////////////expresion regular
+            {
+               token=token+String.valueOf(caracteres[indice]);
+               x++;
+               indice++;
+               estado=22;
             }
             else /// si no viene ninguno de los anteriores es un error
             {
@@ -735,6 +744,212 @@ public class analizadorlexico {
              estado=0;
              }
         break;
+        case 22:///////////inicio de expresion regular
+            if(indice<=caracteres.length-1)
+            {
+            ascii=caracteres[indice];
+            }
+            else 
+            {
+                errores nuevo=new errores(x,y,token,"error lexico");
+                listaerrores.add(nuevo);
+            return true;
+            }
+            if(ascii==34)
+            {
+               token=token+String.valueOf(caracteres[indice]);
+               x++;
+               indice++;
+               estado=23;
+            }
+            else if(ascii==123)
+            {
+               token=token+String.valueOf(caracteres[indice]);
+               x++;
+               indice++;
+               estado=25;
+            }
+            else if(ascii==46||ascii==42||ascii==43||ascii==124||ascii==63)///////////////expresion regular
+            {
+               token=token+String.valueOf(caracteres[indice]);
+               x++;
+               indice++;
+               estado=22;
+            }
+            else if(ascii==10)
+            {
+                lexemas nuevo=new lexemas(x,y,token,"expresion regular");
+                listadetokens.add(nuevo);
+                x=0;
+                y++;
+                indice++;
+                estado=0;
+            }
+            else if(ascii==32)
+            {
+                x++;
+                indice++;
+                estado=22;
+            }
+            else if(ascii==59)
+            {
+                lexemas nuevo=new lexemas(x,y,token,"expresion regular");
+                listadetokens.add(nuevo);
+                x++;
+                estado=0;
+            }
+             else
+             {
+             errores nuevo=new errores(x,y,token,"error lexico");
+             listaerrores.add(nuevo);
+             estado=0;
+             }
+        break;
+        case 23:
+            if(indice<=caracteres.length-1)
+            {
+            ascii=caracteres[indice];
+            }
+            else 
+            {
+                errores nuevo=new errores(x,y,token,"error lexico");
+                listaerrores.add(nuevo);
+            return true;
+            }
+            
+             if(ascii==34||ascii==10)
+            {
+                errores nuevo=new errores(x,y,token,"error lexico");
+                listaerrores.add(nuevo);
+               estado=0;
+            }
+             else
+             {
+             token=token+String.valueOf(caracteres[indice]);
+             estado=24;
+             x++;
+             indice++;
+             }
+        break;
+        case 24:
+            if(indice<=caracteres.length-1)
+            {
+            ascii=caracteres[indice];
+            }
+            else 
+            {
+                errores nuevo=new errores(x,y,token,"error lexico");
+                listaerrores.add(nuevo);
+            return true;
+            }
+            
+             if(ascii==10)
+            {
+                errores nuevo=new errores(x,y,token,"error lexico");
+                listaerrores.add(nuevo);
+               estado=0;
+               y++;
+               x=0;
+            }
+             else if(ascii==34)
+             {
+             token=token+String.valueOf(caracteres[indice]);
+             estado=22;
+             x++;
+             indice++;
+             }
+             else 
+             {
+             token=token+String.valueOf(caracteres[indice]);
+             estado=24;
+             x++;
+             indice++;
+             }
+        break;
+        case 25:
+            if(indice<=caracteres.length-1)
+            {
+            ascii=caracteres[indice];
+            }
+            else 
+            {
+                errores nuevo=new errores(x,y,token,"error lexico");
+                listaerrores.add(nuevo);
+            return true;
+            }
+             if((ascii>=65&& ascii<=90)||(ascii>=97 && ascii<=122))
+            {
+               token=token+String.valueOf(caracteres[indice]);
+               x++;
+               indice++;
+               estado=26;
+            }
+            
+             else
+             {
+             errores nuevo=new errores(x,y,token,"error lexico");
+             listaerrores.add(nuevo);
+             estado=0;
+             }
+        break;
+        case 26:
+            if(indice<=caracteres.length-1)
+            {
+            ascii=caracteres[indice];
+            }
+            else 
+            {
+                errores nuevo=new errores(x,y,token,"error lexico");
+                listaerrores.add(nuevo);
+            return true;
+            }
+             if((ascii>=65&& ascii<=90)||(ascii>=97 && ascii<=122)||(ascii>=48 && ascii<=57))
+            {
+               token=token+String.valueOf(caracteres[indice]);
+               x++;
+               indice++;
+               estado=27;
+            }
+            
+             else
+             {
+             errores nuevo=new errores(x,y,token,"error lexico");
+             listaerrores.add(nuevo);
+             estado=0;
+             }
+        break;
+        case 27:
+            if(indice<=caracteres.length-1)
+            {
+            ascii=caracteres[indice];
+            }
+            else 
+            {
+                errores nuevo=new errores(x,y,token,"error lexico");
+                listaerrores.add(nuevo);
+            return true;
+            }
+             if((ascii>=65&& ascii<=90)||(ascii>=97 && ascii<=122)||(ascii>=48 && ascii<=57))
+            {
+               token=token+String.valueOf(caracteres[indice]);
+               x++;
+               indice++;
+               estado=27;
+            }
+             else if(ascii==125)
+             {
+                 token=token+String.valueOf(caracteres[indice]);
+               x++;
+               indice++;
+             estado=22;
+             }
+             else
+             {
+             errores nuevo=new errores(x,y,token,"error lexico");
+             listaerrores.add(nuevo);
+             estado=0;
+             }
+        break;
         
     }
     }
@@ -754,5 +969,522 @@ public class analizadorlexico {
           System.out.print("lexema:"+listadetokens.get(x).lexem+"  ");
            System.out.println("token:"+listadetokens.get(x).toke);
     }
+    }
+
+        public void recorrertokens()
+    {
+    for(int x=0;x<listadetokens.size();x++)
+    {
+        
+        if(listadetokens.get(x).toke.equals("expresion regular"))
+        {
+            String ide=listadetokens.get(x-2).lexem;
+            String exp=listadetokens.get(x).lexem;
+        insertarexpresion(exp,ide);
+        }
+    }
+    }
+
+    
+public void insertarexpresion(String expre, String identifi)
+{
+    ArrayList<String> pila=new ArrayList<String>();
+    char caracteres[]=expre.toCharArray();
+    int ascii=0;
+    int estado=0;
+    int indice=0;
+    String token="";
+    boolean ejecutar=true;
+    while(ejecutar)
+        
+    {
+    switch (estado)         
+    {
+        case 0:
+            if(indice<=caracteres.length-1)
+            {
+            ascii=caracteres[indice];
+            estado=1;
+            token="";
+            }
+                        else
+            {
+            ejecutar=false;
+            }
+        break;
+        
+        case 1:// estado inicial inician todas las expresiones regulares
+                if (ascii==123)//////////detecto inicio llave
+                {  
+                    indice++;
+                    estado=25;
+
+
+                }
+           else if(ascii==34)/////////////////////cadena
+           {  
+               token=token+"\\"+String.valueOf(caracteres[indice]);
+                indice++;
+                estado=23;
+           }
+                else if(ascii==46||ascii==42||ascii==43||ascii==124||ascii==63)///////////////expresion regular
+            {
+               token=String.valueOf(caracteres[indice]);
+               pila.add(token);
+               indice++;
+               estado=0;
+            }
+
+        break;
+        case 23:
+            if(indice<=caracteres.length-1)
+            {
+            ascii=caracteres[indice];
+             token=token+String.valueOf(caracteres[indice]);
+             estado=24;
+             indice++;
+            }
+            else
+            {
+            ejecutar=false;
+            }
+            
+        break;
+        case 24:
+            if(indice<=caracteres.length-1)
+            {
+            ascii=caracteres[indice];
+            if(ascii==34)
+             {
+            token=token+"\\"+String.valueOf(caracteres[indice]);
+             pila.add(token);
+             estado=0;
+             indice++;
+             }
+             else 
+             {
+             token=token+String.valueOf(caracteres[indice]);
+             estado=24;
+             indice++;
+             }
+            } 
+            else
+            {
+            ejecutar=false;
+            }
+        break;
+        case 25:
+            if(indice<=caracteres.length-1)
+            {
+            ascii=caracteres[indice];
+            
+               token=token+String.valueOf(caracteres[indice]);
+               indice++;
+               estado=26;
+            }
+                        else
+            {
+            ejecutar=false;
+            }
+            
+        break;
+        case 26:
+            if(indice<=caracteres.length-1)
+            {
+            ascii=caracteres[indice];
+               token=token+String.valueOf(caracteres[indice]);
+               
+               indice++;
+               estado=27;
+            }
+            else
+            {
+            ejecutar=false;
+            }
+            
+        break;
+        case 27:
+            if(indice<=caracteres.length-1)
+            {
+            ascii=caracteres[indice];
+            
+             if((ascii>=65&& ascii<=90)||(ascii>=97 && ascii<=122)||(ascii>=48 && ascii<=57))
+            {
+               token=token+String.valueOf(caracteres[indice]);
+               indice++;
+               estado=27;
+            }
+             else if(ascii==125)
+             {
+             pila.add(token);
+             indice++;
+             estado=0;
+             }
+            }
+                        else
+            {
+            ejecutar=false;
+            } 
+        break;
+        
+    }
+    }
+    arboldeexpresiones hijoder=new arboldeexpresiones("#",null,null);
+    arboldeexpresiones rais=new arboldeexpresiones(".",hijoder,null);
+    rais.nografica=10000;
+    hijoder.nografica=10001;
+    hijoder.padre=rais;
+    rais.padre=null;
+    
+    arboldeexpresiones subrais=new arboldeexpresiones(pila.get(0),null,null);
+    arboldeexpresiones auxiliar=subrais;
+    int index=1;
+    
+    while(index<pila.size())
+    {
+       
+        //System.out.println(pila.get(index));
+        if((auxiliar.datos.equals("?")||auxiliar.datos.equals("*")||auxiliar.datos.equals("+"))&& auxiliar.hijoizquierdo!=null)
+        {
+        auxiliar=auxiliar.padre;
+        }
+        else{
+        if(pila.get(index).equals("."))
+        {
+            if(auxiliar.hijoderecho==null&& auxiliar.hijoizquierdo==null)
+            {
+            arboldeexpresiones nuevo=new arboldeexpresiones(".",null,null);
+            nuevo.padre=auxiliar;
+            nuevo.nografica=index;
+            auxiliar.hijoizquierdo=nuevo;
+            auxiliar=nuevo;
+            index++;
+            }
+            else if(auxiliar.hijoderecho==null&& auxiliar.hijoizquierdo!=null)
+            {
+            arboldeexpresiones nuevo=new arboldeexpresiones(".",null,null);
+            nuevo.padre=auxiliar;
+            nuevo.nografica=index;
+            auxiliar.hijoderecho=nuevo;
+            auxiliar=nuevo;
+            index++;
+            }
+            else
+            {
+            auxiliar=auxiliar.padre;
+            }
+        }
+        else if(pila.get(index).equals("|"))
+        {
+            if(auxiliar.hijoderecho==null&& auxiliar.hijoizquierdo==null)
+            {
+            arboldeexpresiones nuevo=new arboldeexpresiones("|",null,null);
+            nuevo.padre=auxiliar;
+            nuevo.nografica=index;
+            auxiliar.hijoizquierdo=nuevo;
+            auxiliar=nuevo;
+            index++;
+            }
+           else if(auxiliar.hijoderecho==null&& auxiliar.hijoizquierdo!=null)
+            {
+            arboldeexpresiones nuevo=new arboldeexpresiones("|",null,null);
+            nuevo.padre=auxiliar;
+            nuevo.nografica=index;
+            auxiliar.hijoderecho=nuevo;
+            auxiliar=nuevo;
+            index++;
+            }
+            else
+            {
+            auxiliar=auxiliar.padre;
+            }
+        }
+        else if(pila.get(index).equals("*"))
+        {
+
+            if(auxiliar.hijoderecho==null&& auxiliar.hijoizquierdo==null)
+            {
+            arboldeexpresiones nuevo=new arboldeexpresiones("*",null,null);
+            nuevo.padre=auxiliar;
+            nuevo.nografica=index;
+            auxiliar.hijoizquierdo=nuevo;
+            auxiliar=nuevo;
+            index++;
+            }
+           else if(auxiliar.hijoderecho==null&& auxiliar.hijoizquierdo!=null)
+            {
+            arboldeexpresiones nuevo=new arboldeexpresiones("*",null,null);
+            nuevo.padre=auxiliar;
+            nuevo.nografica=index;
+            auxiliar.hijoderecho=nuevo;
+            auxiliar=nuevo;
+            index++;
+            }
+           else
+            {
+            auxiliar=auxiliar.padre;
+            }
+        }
+        else if(pila.get(index).equals("?"))
+        {
+            if(auxiliar.hijoderecho==null&& auxiliar.hijoizquierdo==null)
+            {
+            arboldeexpresiones nuevo=new arboldeexpresiones("?",null,null);
+            nuevo.padre=auxiliar;
+            nuevo.nografica=index;
+            auxiliar.hijoizquierdo=nuevo;
+            auxiliar=nuevo;
+            index++;
+            }
+           else if(auxiliar.hijoderecho==null&& auxiliar.hijoizquierdo!=null)
+            {
+            arboldeexpresiones nuevo=new arboldeexpresiones("?",null,null);
+            nuevo.padre=auxiliar;
+            nuevo.nografica=index;
+            auxiliar.hijoderecho=nuevo;
+            auxiliar=nuevo;
+            index++;
+            }
+            else
+            {
+            auxiliar=auxiliar.padre;
+            }
+        }
+        else if(pila.get(index).equals("+"))
+        {
+           if(auxiliar.hijoderecho==null&& auxiliar.hijoizquierdo==null)
+            {
+            arboldeexpresiones nuevo=new arboldeexpresiones("+",null,null);
+            nuevo.padre=auxiliar;
+            nuevo.nografica=index;
+            auxiliar.hijoizquierdo=nuevo;
+            auxiliar=nuevo;
+            index++;
+            }
+           else if(auxiliar.hijoderecho==null&& auxiliar.hijoizquierdo!=null)
+            {
+            arboldeexpresiones nuevo=new arboldeexpresiones("+",null,null);
+            nuevo.padre=auxiliar;
+            nuevo.nografica=index;
+            auxiliar.hijoderecho=nuevo;
+            auxiliar=nuevo;
+            index++;
+            }
+           else
+            {
+            auxiliar=auxiliar.padre;
+            }
+        }
+        else
+        {
+            if(auxiliar.hijoderecho==null && auxiliar.hijoizquierdo==null)
+            {
+            arboldeexpresiones nuevo=new arboldeexpresiones(pila.get(index),null,null);
+            nuevo.padre=auxiliar;
+            nuevo.nografica=index;
+            auxiliar.hijoizquierdo=nuevo;
+            index++;
+            }
+            else if(auxiliar.hijoderecho==null && auxiliar.hijoizquierdo!=null)
+            {
+            arboldeexpresiones nuevo=new arboldeexpresiones(pila.get(index),null,null);
+            nuevo.padre=auxiliar;
+            nuevo.nografica=index;
+            auxiliar.hijoderecho=nuevo;
+            auxiliar=auxiliar.padre;
+            index++;
+            }
+            else
+            {
+            auxiliar=auxiliar.padre;
+            }
+        }
+        }
+    }
+    
+    rais.hijoizquierdo=subrais;
+    subrais.padre=rais;
+    
+    nodolistaexpresiones nuevaexpre=new nodolistaexpresiones(identifi,rais);
+    listaexpre.add(nuevaexpre);
+}
+
+
+int idenramas=0;
+public void modificararbol()
+    {
+        
+        for(int x=0;x<listaexpre.size();x++)
+    {
+        idenramas=1;
+         agregaridentificador(listaexpre.get(x).raiz);
+         anulable(listaexpre.get(x).raiz);
+         primeros(listaexpre.get(x).raiz);
+         siguientes(listaexpre.get(x).raiz);
+   }
+    }
+
+     public void agregaridentificador(arboldeexpresiones raiz)
+    {
+        if(raiz.hijoderecho==null && raiz.hijoizquierdo==null)
+        {
+        raiz.identificador=idenramas;
+        idenramas++;
+        }
+        if(raiz.hijoizquierdo!=null)
+        {
+            agregaridentificador(raiz.hijoizquierdo);
+        }
+        if(raiz.hijoderecho!=null)
+        {
+            agregaridentificador(raiz.hijoderecho);
+        }
+    }
+     
+      public void anulable(arboldeexpresiones raiz)
+    {
+       
+        if(raiz.hijoizquierdo!=null)
+        {
+            anulable(raiz.hijoizquierdo);
+        }
+        if(raiz.hijoderecho!=null)
+        {
+            anulable(raiz.hijoderecho);
+        }
+        
+         if(raiz.datos.equals("*"))
+        {
+        raiz.anulable='a';
+        }
+         else if(raiz.datos.equals("|"))
+        {
+        if(raiz.hijoderecho.anulable=='a'||raiz.hijoizquierdo.anulable=='a')
+        {
+        raiz.anulable='a';
+        }
+        else
+        {
+        raiz.anulable='n';
+        }
+        }
+         else if(raiz.datos.equals("."))
+        {
+        if(raiz.hijoderecho.anulable=='a'&& raiz.hijoizquierdo.anulable=='a')
+        {
+        raiz.anulable='a';
+        }
+        else
+        {
+        raiz.anulable='n';
+        }
+        }
+         else if(raiz.datos.equals("?"))
+        {
+        raiz.anulable='a';
+        }
+         else if(raiz.datos.equals("+"))
+        {
+        raiz.anulable='n';
+        }
+         else
+        {
+        raiz.anulable='n';
+        }
+    }
+      
+      public void primeros(arboldeexpresiones raiz)
+    {
+       
+        if(raiz.hijoizquierdo!=null)
+        {
+            primeros(raiz.hijoizquierdo);
+        }
+        if(raiz.hijoderecho!=null)
+        {
+            primeros(raiz.hijoderecho);
+        }
+        
+         if(raiz.datos.equals("*"))
+        {
+        raiz.primeros=raiz.hijoizquierdo.primeros;
+        }
+         else if(raiz.datos.equals("|"))
+        {
+        raiz.primeros=raiz.hijoizquierdo.primeros+","+raiz.hijoderecho.primeros;
+        }
+         else if(raiz.datos.equals("."))
+        {
+            if(raiz.hijoizquierdo.anulable=='a')
+            {
+            raiz.primeros=raiz.hijoizquierdo.primeros+","+raiz.hijoderecho.primeros;
+            }
+            else
+            {
+            raiz.primeros=raiz.hijoizquierdo.primeros;
+            }
+        }
+         else if(raiz.datos.equals("?"))
+        {
+        raiz.primeros=raiz.hijoizquierdo.primeros;
+        }
+         else if(raiz.datos.equals("+"))
+        {
+            raiz.primeros=raiz.hijoizquierdo.primeros;
+        }
+         else
+        {
+        raiz.primeros=String.valueOf(raiz.identificador);
+        }
+    }
+      
+            public void siguientes(arboldeexpresiones raiz)
+    {
+       
+        if(raiz.hijoizquierdo!=null)
+        {
+            siguientes(raiz.hijoizquierdo);
+        }
+        if(raiz.hijoderecho!=null)
+        {
+            siguientes(raiz.hijoderecho);
+        }
+        
+         if(raiz.datos.equals("*"))
+        {
+        raiz.siguientes=raiz.hijoizquierdo.siguientes;
+        }
+         else if(raiz.datos.equals("|"))
+        {
+        raiz.siguientes=raiz.hijoizquierdo.siguientes+","+raiz.hijoderecho.siguientes;
+        }
+         else if(raiz.datos.equals("."))
+        {
+            if(raiz.hijoderecho.anulable=='a')
+            {
+            raiz.siguientes=raiz.hijoizquierdo.siguientes+","+raiz.hijoderecho.siguientes;
+            }
+            else
+            {
+            raiz.siguientes=raiz.hijoderecho.siguientes;
+            }
+        }
+         else if(raiz.datos.equals("?"))
+        {
+        raiz.siguientes=raiz.hijoizquierdo.siguientes;
+        }
+         else if(raiz.datos.equals("+"))
+        {
+            raiz.siguientes=raiz.hijoizquierdo.siguientes;
+        }
+         else
+        {
+        raiz.siguientes=String.valueOf(raiz.identificador);
+        }
+    }
+
+ArrayList<nodolistaexpresiones> devolverexpre()
+{
+    return listaexpre;
     }
 }

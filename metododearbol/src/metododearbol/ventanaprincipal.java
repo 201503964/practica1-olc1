@@ -1,5 +1,17 @@
 package metododearbol;
 
+import java.awt.Component;
+import java.awt.Image;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /*
@@ -17,7 +29,10 @@ public class ventanaprincipal extends javax.swing.JFrame {
     /**
      * Creates new form ventanaprincipal
      */
+    ArrayList<nodolistaexpresiones> arbol=new  ArrayList<nodolistaexpresiones>();
     analizadorlexico nuevoanalisislexico=new analizadorlexico();
+    int posicionlistaarbol=0;
+    ArrayList<nodotablasig> tablasig=new  ArrayList<nodotablasig>();
     public ventanaprincipal() {
         initComponents();
     }
@@ -33,11 +48,29 @@ public class ventanaprincipal extends javax.swing.JFrame {
 
         jScrollPane2 = new javax.swing.JScrollPane();
         jTree1 = new javax.swing.JTree();
+        jSeparator1 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
         entrada = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        ARBOLES = new javax.swing.JList<>();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        TABLASIG = new javax.swing.JList<>();
+        jLabel4 = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        TABLATRANS = new javax.swing.JList<>();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        AUTOMATAS = new javax.swing.JList<>();
+        quemuestro = new javax.swing.JComboBox<>();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        IMAGEN = new javax.swing.JLabel();
+        ANTERIOR = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -62,6 +95,43 @@ public class ventanaprincipal extends javax.swing.JFrame {
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
+            }
+        });
+
+        ARBOLES.setToolTipText("");
+        jScrollPane3.setViewportView(ARBOLES);
+
+        jLabel2.setText("ARBOLES");
+
+        jLabel3.setText("TABLA DE SIGUIENTES");
+
+        jScrollPane4.setViewportView(TABLASIG);
+
+        jLabel4.setText("TABLA DE TRANCISIONES");
+
+        jScrollPane5.setViewportView(TABLATRANS);
+
+        jLabel5.setText("AUTOMATAS");
+
+        jScrollPane6.setViewportView(AUTOMATAS);
+
+        quemuestro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ARBOLES", "TABLA DE SIGUIENTES", "TABLA DE TRANSICIONES", "AUTOMATAS" }));
+
+        IMAGEN.setBackground(new java.awt.Color(255, 255, 255));
+        IMAGEN.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jScrollPane7.setViewportView(IMAGEN);
+
+        ANTERIOR.setText("ANTERIOR");
+        ANTERIOR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ANTERIORActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("SIGUIENTE");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
             }
         });
 
@@ -93,32 +163,85 @@ public class ventanaprincipal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(68, 68, 68)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jButton1)
-                        .addGap(30, 30, 30)
-                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(532, Short.MAX_VALUE))
+                        .addGap(295, 295, 295)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 340, Short.MAX_VALUE)
+                .addComponent(quemuestro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(138, 138, 138))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel3)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane7)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(ANTERIOR, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(129, 129, 129)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(23, 23, 23))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addContainerGap(157, Short.MAX_VALUE))
+                    .addComponent(jLabel1)
+                    .addComponent(quemuestro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButton1)
+                                    .addComponent(jButton2)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ANTERIOR)
+                            .addComponent(jButton4))
+                        .addGap(89, 89, 89))))
         );
 
         pack();
@@ -130,7 +253,10 @@ public class ventanaprincipal extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-       if(entrada.getText().equalsIgnoreCase(""))
+       
+        posicionlistaarbol=0;
+        arbol.clear();
+        if(entrada.getText().equalsIgnoreCase(""))
        {
            JOptionPane.showMessageDialog(null, "ingrese texto al cuado de texto");
        }
@@ -140,7 +266,16 @@ public class ventanaprincipal extends javax.swing.JFrame {
        if(sinerrores)
        {
           JOptionPane.showMessageDialog(null, "entrada sin errores");
-          nuevoanalisislexico.imprimir();
+          nuevoanalisislexico.recorrertokens();
+          nuevoanalisislexico.modificararbol();
+               try {
+                   llenarlista();
+                  // insertarimagen();
+               } catch (IOException ex) {
+                   Logger.getLogger(ventanaprincipal.class.getName()).log(Level.SEVERE, null, ex);
+               }
+          
+         
        }
        else
        {
@@ -149,6 +284,259 @@ public class ventanaprincipal extends javax.swing.JFrame {
        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        String sel;//declaro un string para recibir los datos
+        sel=quemuestro.getSelectedItem().toString();//le paso los datos de la
+        System.out.println(sel);
+        if(posicionlistaarbol<arbol.size()-1)
+        {
+           posicionlistaarbol++;
+           if(sel.equals("ARBOLES"))
+           {
+                insertarimagen(arbol.get(posicionlistaarbol).identificador);
+           }
+           else if(sel.equals("TABLA DE SIGUIENTES"))
+           {
+                
+           }
+           else if(sel.equals("TABLA DE TRANSICIONES"))
+           {
+                
+           }
+           else
+           {
+                
+           }
+        }
+        else
+        {
+        JOptionPane.showMessageDialog(null,"ya no hay imagen siguiente");
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void ANTERIORActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ANTERIORActionPerformed
+        // TODO add your handling code here:
+        String sel;//declaro un string para recibir los datos
+        sel=quemuestro.getSelectedItem().toString();//le paso los datos de la
+        System.out.println(sel);
+        if(posicionlistaarbol>=1)
+        {
+           posicionlistaarbol--;
+ if(sel.equals("ARBOLES"))
+           {
+                insertarimagen(arbol.get(posicionlistaarbol).identificador);
+           }
+           else if(sel.equals("TABLA DE SIGUIENTES"))
+           {
+                
+           }
+           else if(sel.equals("TABLA DE TRANSICIONES"))
+           {
+                
+           }
+           else
+           {
+                
+           }            
+        }
+        else
+        {
+        JOptionPane.showMessageDialog(null,"ya no hay imagen anterior");
+        }
+    }//GEN-LAST:event_ANTERIORActionPerformed
+
+    public void insertarimagen(String nombre)
+    {
+        String ruta="C:\\Users\\luiss\\Desktop\\olc\\"+nombre+".png";
+        
+   ImageIcon fot = new ImageIcon(ruta);
+Icon icono = new ImageIcon(fot.getImage().getScaledInstance(800, 1200, Image.SCALE_DEFAULT));
+IMAGEN.setIcon(icono);
+this.repaint();
+   // IMAGEN.setIcon(new ImageIcon(ruta));
+    }
+    
+    public void graficararbol(int pos) throws IOException
+    {
+
+    
+   // graficar(0,arbol.get(pos).raiz);
+    
+    
+    }
+    
+    
+    public void llenarlista() throws IOException
+    {
+    arbol=nuevoanalisislexico.devolverexpre();
+    if(arbol.size()>0)
+    {
+        DefaultListModel modelo = new DefaultListModel();
+    for(int x=0;x<arbol.size();x++)
+    {
+         System.out.println(arbol.get(x).identificador); 
+       
+        graficar(0,arbol.get(x).raiz,arbol.get(x).identificador);
+         modelo.addElement(arbol.get(x).identificador);
+    }
+    ARBOLES.setModel(modelo);
+    TABLASIG.setModel(modelo);
+    AUTOMATAS.setModel(modelo);
+    TABLATRANS.setModel(modelo);
+    
+    }
+    
+    }
+    
+    public void arbolito(arboldeexpresiones raiz)
+    {
+        
+         System.out.print("dato:"+raiz.datos);
+        System.out.print("  iden:"+raiz.identificador);
+        System.out.print("  anulable:"+raiz.anulable);
+        System.out.print("  primeros:"+raiz.primeros);
+        System.out.println("  siguientes:"+raiz.siguientes);
+        if(raiz.hijoizquierdo!=null)
+        {
+            arbolito(raiz.hijoizquierdo);
+        }
+        if(raiz.hijoderecho!=null)
+        {
+            arbolito(raiz.hijoderecho);
+        }
+    }
+   String grafo;
+     public void nodoshojas(int jugador,arboldeexpresiones hijo)
+   {
+
+       if(hijo.datos.equals("|")||hijo.datos.equals(".")||hijo.datos.equals("?")||hijo.datos.equals("+")||hijo.datos.equals("*"))
+       {
+       grafo=grafo+"nodo"+hijo.nografica+"[style=filled,label=\n \"dato:    "+hijo.datos+"\nidentificador:  "+hijo.anulable+"\nprimeros:   "+hijo.primeros+"\nsiguientes:  "+hijo.siguientes+"\n\",fontname=\"times bold italic\",fillcolor=yellow];\n";
+       }
+       else{
+        grafo=grafo+"nodo"+hijo.nografica+"[style=filled,label=\n \"dato:    "+hijo.datos+"\nidentificador:  "+hijo.identificador+"\nanulable:    "+hijo.anulable+"\nprimeros:   "+hijo.primeros+"\nsiguientes:  "+hijo.siguientes+"\n\",fontname=\"times bold italic\",fillcolor=yellow];\n";
+       }
+       
+       
+       if(hijo.hijoizquierdo!=null)
+       {
+       nodoshojas(jugador,hijo.hijoizquierdo);
+       }
+       if(hijo.hijoderecho!=null)
+       {
+       nodoshojas(jugador,hijo.hijoderecho);
+       }
+   }
+      public void punterosahoja(arboldeexpresiones hijo)
+   {
+       if(hijo.hijoizquierdo!=null)
+       {
+       grafo=grafo+"nodo"+hijo.nografica+"->"+"nodo"+hijo.hijoizquierdo.nografica+";";
+       punterosahoja(hijo.hijoizquierdo);
+       }
+       if(hijo.hijoderecho!=null)
+       {
+       grafo=grafo+"nodo"+hijo.nografica+"->"+"nodo"+hijo.hijoderecho.nografica+";";
+       punterosahoja(hijo.hijoderecho);
+       }
+   }
+   public void graficar(int jugador,arboldeexpresiones raiz,String nombre) throws IOException
+   {
+   if(raiz==null)
+   {
+   JOptionPane.showMessageDialog(null, "EL ARBOL ESTA VACIO");
+   }
+   else
+   {
+       grafo="digraph D{\n rankdir=TB;\n node [shape=circle,fontsize=15,color=yellow ,fontcolor=\"blue\"];\n graph [pad=0.4 nodsep=0.6 ranksep=0.4]\n ";
+       nodoshojas(jugador,raiz);
+       punterosahoja(raiz);
+       grafo=grafo+"}";
+       String ruta = "C:\\Users\\luiss\\Desktop\\olc\\"+nombre+".txt";
+        File archivo = new File(ruta);
+        BufferedWriter bw;
+        if(archivo.exists()) {
+            bw = new BufferedWriter(new FileWriter(archivo));
+            bw.write(grafo);
+        } else {
+            bw = new BufferedWriter(new FileWriter(archivo));
+            bw.write(grafo);
+        }
+        bw.close();
+        generar(nombre);
+   }
+   
+   }
+   
+   public void generar(String nombre){
+try {
+
+//path del dot.exe,por lo general es la misma, pero depende de donde hayas instalado el paquete de Graphviz
+
+String dotPath = "C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe";
+
+//path del archivo creado con el codigo del graphviz que queremos
+
+String fileInputPath = "C:\\Users\\luiss\\Desktop\\olc\\"+nombre+".txt";
+//path de salida del grafo, es decir el path de la imagen que vamos a crear con graphviz
+
+String fileOutputPath = "C:\\Users\\luiss\\Desktop\\olc\\"+nombre+".png";
+
+//tipo de imagen de salida, en este caso es jpg
+
+String tParam = "-Tpng";
+
+String tOParam = "-o";
+
+//concatenamos nuestras direcciones. Lo que hice es crear un vector, para poder editar las direcciones de entrada y salida, usando las variables antes inicializadas
+
+//recordemos el comando en la consola de windows: C:\Archivos de programa\Graphviz 2.21\bin\dot.exe -Tjpg grafo1.txt -o grafo1.jpg Esto es lo que concatenamos en el vector siguiente:
+
+String[] cmd = new String[5];
+cmd[0] = dotPath;
+cmd[1] = tParam;
+cmd[2] = fileInputPath;
+cmd[3] = tOParam;
+cmd[4] = fileOutputPath;
+
+//Invocamos nuestra clase 
+
+Runtime rt = Runtime.getRuntime();
+
+//Ahora ejecutamos como lo hacemos en consola
+
+rt.exec( cmd );
+    System.out.println("se genero imagen");
+
+} catch (Exception ex) {
+ex.printStackTrace();
+}  finally {
+}
+}
+   
+   
+   
+   public void llenartablasig(arboldeexpresiones raiz)
+    {
+        if(raiz.hijoderecho==null && raiz.hijoizquierdo==null)
+        {
+        nodotablasig nuevo=new nodotablasig();
+        nuevo.dato=raiz.datos;
+        nuevo.identificador=String.valueOf(raiz.identificador);
+        tablasig.add(nuevo);
+        }
+        if(raiz.hijoizquierdo!=null)
+        {
+            llenartablasig(raiz.hijoizquierdo);
+        }
+        if(raiz.hijoderecho!=null)
+        {
+            llenartablasig(raiz.hijoderecho);
+        }
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -185,10 +573,21 @@ public class ventanaprincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ANTERIOR;
+    private javax.swing.JList<String> ARBOLES;
+    private javax.swing.JList<String> AUTOMATAS;
+    private javax.swing.JLabel IMAGEN;
+    private javax.swing.JList<String> TABLASIG;
+    private javax.swing.JList<String> TABLATRANS;
     private javax.swing.JTextArea entrada;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
@@ -197,6 +596,13 @@ public class ventanaprincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTree jTree1;
+    private javax.swing.JComboBox<String> quemuestro;
     // End of variables declaration//GEN-END:variables
 }
